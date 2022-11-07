@@ -13,9 +13,31 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Book.init({
-    title: DataTypes.STRING,
-    author: DataTypes.STRING,
+ Book.init({
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Please provide a value for "title"',
+        },
+      notNull: {
+        msg: 'Please provide a value for "title"',
+        },
+      }
+    },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Please provide a value for "author"',
+        },
+      notNull: {
+        msg: 'Please provide a value for "author"',
+        },
+      }
+    },
     genre: DataTypes.STRING,
     year: DataTypes.INTEGER
   }, {
