@@ -6,29 +6,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const { sequelize } = require('./models');
 
 var app = express();
 
-// const Sequelize = require('sequelize');
-
-// const sequelize = new Sequelize({
-//   dialect: 'sqlite',
-//   storage: 'library.db'
-// });
-
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection to the database successful!');
-  } catch (error) {
-    console.error('Error connecting to the database: ', error);
-  }
-})();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
