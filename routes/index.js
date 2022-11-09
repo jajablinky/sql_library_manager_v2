@@ -34,7 +34,7 @@ router.get("/books/new", async (req, res) => {
   res.render("new-book", { books, title: "Books" });
 });
 
-router.post("/books/new", async (req, res) => {
+router.post("/books/new", asyncHandler(async (req, res) => {
   let book;
   try {
     book = await Book.create(req.body);
@@ -47,7 +47,7 @@ router.post("/books/new", async (req, res) => {
       throw error; // error caught in the asyncHandler's catch block
   }
 }
-});
+}));
 /* show and update book details by their id */
 
 router.get(
