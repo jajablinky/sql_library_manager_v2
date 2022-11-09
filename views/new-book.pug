@@ -1,14 +1,17 @@
 extends layout 
 
 block content 
-    h1 New Book 
+    h1 New Book
+    
+    include form-error
+
     form(method="post")
         p 
             label(for="title") Title 
-            input#title(name="title" type ="text" value='')
+            input#title(name="title" type ="text" value='' required)
         p 
             label(for="author") Author
-            input#author(name="author" type ="text" value='')
+            input#author(name="author" type ="text" value='' required)
         p 
             label(for="genre") Genre 
             input#genre(name="genre" type ="text" value='')

@@ -29,12 +29,12 @@ router.get("/books", async (req, res) => {
 
 /* Show and post new book to database */
 
-router.get("/books/new", (req, res) => {
+router.get("/books/new", async (req, res) => {
   const books = await Book.findAll();
-  res.render("new-book", { books });
+  res.render("new-book", { books, title: "Books" });
 });
 
-router.post("/books/new", asyncHandler(async (req, res) => {
+router.post("/books/new", async (req, res) => {
   let book;
   try {
     book = await Book.create(req.body);
@@ -42,12 +42,12 @@ router.post("/books/new", asyncHandler(async (req, res) => {
   } catch (error) {
     if (error.name === "SequelizeValidationError") { // checking the error
       book = await Book.build(req.body);
-      res.render("books/new", { book, errors: error.errors, title: "New book" })
+      res.render("books/new", { book, errors: error.errors })
   } else {
       throw error; // error caught in the asyncHandler's catch block
   }
 }
-}));
+});
 /* show and update book details by their id */
 
 router.get(
