@@ -25,28 +25,33 @@ app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
+  const err = new Error('Oops, could not find that page.');
+  err.status = 404;
   next(createError(404));
 });
 
-/* 404 ERROR HANDLER : to catch undefined or non-existent route requests */
-app.use((req, res, next) => {
-  console.log('404 error handler called')
-  const err = new Error('Oops, could not find that page.')
-  res.status(404).render('page-not-found', { err });
-});
-
-/* GLOBAL ERROR HANDLER */
-app.use((err, req, res, next) => {
-  if (err) {
-    console.log('Global error handler called', err)
-  }
-  if (err.status === 404){
-  res.status(404).render('page-not-found');
-  err.message = 'Oops, could not find that page.'
+app.use((err,req,res,next)=>{
+  res.status(err.status || 500); 
+  if (err.status === 404){ 
+      console.log('404 error')
+      res.render('page-not-found',{
+          err: {
+              status : err.status,
+              message: err.message,
+              stack: err.stack
+          }})
   } else {
-    err.message = err.message || 'Oops, something went wrong on the server.';
-    res.status(err.status || 500).render('error', { err })
+    console.log('500 error')
+      err.status =  500
+      err.message = "An error is occured."
+      res.render('error',{
+          err: {
+              status : err.status,
+              message: err.message,
+              stack: err.stack
+          }
+      })
   }
-});
+})
 
 module.exports = app;
