@@ -1,7 +1,10 @@
 extends layout
 
 block content
-  h1= Books
+  h1 Books
+  form(action="/books/search/")
+    input.search-input(type="search" name="term" placeholder="Search...")
+    input.search-submit(type="submit" value="🔍")
   p
     a.button(href="/books/new") Create New Books
   table
