@@ -33,19 +33,14 @@ router.get("/books", async (req, res) => {
 
     const bookResults = {};
 
-    if (endIndex < books.length) {
       bookResults.next = {
         page: page + 1,
         limit: limit,
-      };
-    }
-
-    if (startIndex > 0) {
+      }
       bookResults.prev = {
         page: page - 1,
         limit: limit,
-      };
-    }
+      }
 
     bookResults.results = books.slice(startIndex, endIndex);
 

@@ -23,5 +23,7 @@ block content
           td= book.author
           td= book.genre
           td= book.year
-  button(onclick= bookResults.prev) Prev
-  button(onclick= bookResults.next) Next
+  form(action=`/books/?page=${bookResults.prev.page}&limit=${bookResults.prev.limit}`)
+    button(type="submit") Prev
+  form(action=`/books/?page=${bookResults.next.page}&limit=${bookResults.next.limit}`)
+    button(type="submit") Next
