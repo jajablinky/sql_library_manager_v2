@@ -16,16 +16,10 @@ block content
         th year
     tbody 
 
-      each book in bookResults.results 
+      each book in books
         tr 
           td
             a(href="/books/" + book.id)= book.title
           td= book.author
           td= book.genre
           td= book.year
-  if(bookResults.prev.page > 0)
-    a(href =`/books/?page=${bookResults.prev.page}&limit=${bookResults.prev.limit}`)
-      button(type="submit") Prev
-  if(bookResults.results.length > 0)
-    a(href =`/books/?page=${bookResults.next.page}&limit=${bookResults.next.limit}`)
-      button(type="submit") Next

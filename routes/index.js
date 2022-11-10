@@ -49,7 +49,7 @@ router.get("/books", async (req, res) => {
 });
 
 //search
-router.get("/books/search", async (req, res) => {
+router.post("/books", async (req, res) => {
   let term = req.query.term;
   const books = await Book.findAll({
     where: {
@@ -70,25 +70,7 @@ router.get("/books/search", async (req, res) => {
     },
   });
 
-  const page = parseInt(req.query.page);
-  const limit = parseInt(req.query.limit);
-
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const bookResults = {};
-
-      bookResults.next = {
-        page: page + 1,
-        limit: limit,
-      }
-      bookResults.prev = {
-        page: page - 1,
-        limit: limit,
-      }
-
-    bookResults.results = books.slice(startIndex, endIndex);
-  res.render("index", { bookResults, page, limit });
+  res.render("search", { books });
 });
 
 /* Show and post new book to database */
