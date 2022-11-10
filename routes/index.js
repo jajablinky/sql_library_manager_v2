@@ -1,3 +1,4 @@
+const createError = require("http-errors");
 const express = require("express");
 const router = express.Router();
 const { Book } = require("../models");
@@ -18,13 +19,38 @@ const asyncHandler = (cb) => {
 
 //redirect to list of books as home page
 router.get("/", async (req, res) => {
-  res.redirect("/books");
+  res.redirect("/books/?page=1&limit=3");
 });
 
 //full list of books
 router.get("/books", async (req, res) => {
   const books = await Book.findAll();
-  res.render("index", { books });
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const bookResults = {};
+
+    if (endIndex < books.length) {
+      bookResults.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      bookResults.prev = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    bookResults.results = books.slice(startIndex, endIndex);
+
+    res.render("index", { bookResults });
+
 });
 
 //search
@@ -80,12 +106,12 @@ router.post(
 
 router.get(
   "/books/:id",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
       res.render("update-book", { book });
     } else {
-      res.sendStatus(404);
+      next(createError(404));
     }
   })
 );

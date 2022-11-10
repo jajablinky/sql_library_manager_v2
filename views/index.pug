@@ -15,11 +15,13 @@ block content
         th genre 
         th year
     tbody 
-     
-      each book in books 
+
+      each book in bookResults.results 
         tr 
           td
             a(href="/books/" + book.id)= book.title
           td= book.author
           td= book.genre
           td= book.year
+  button(onclick= bookResults.prev) Prev
+  button(onclick= bookResults.next) Next
