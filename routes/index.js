@@ -23,54 +23,42 @@ router.get("/", async (req, res) => {
 });
 
 //full list of books
-router.get("/books", async (req, res) => {
-  const books = await Book.findAll();
+router.get('/books', async (req, res) => {
+  const term = req.query.term;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
 
-    const bookResults = {};
-
-      bookResults.next = {
-        page: page + 1,
-        limit: limit,
-      }
-      bookResults.prev = {
-        page: page - 1,
-        limit: limit,
-      }
-
-    bookResults.results = books.slice(startIndex, endIndex);
-
-    res.render("index", { bookResults });
-
-});
-
-//search
-router.post("/books", async (req, res) => {
-  let term = req.query.term;
-  const books = await Book.findAll({
-    where: {
-      [Op.or]: {
-        title: {
-          [Op.like]: `%${term}%`,
-        },
-        author: {
-          [Op.like]: `%${term}%`,
-        },
-        genre: {
-          [Op.like]: `%${term}%`,
-        },
-        year: {
-          [Op.like]: `%${term}%`,
-        },
-      },
+  const books = await Book.findAll();
+  const bookResults = {
+    next: {
+      page: page + 1,
+      limit: limit
     },
-  });
+    prev: {
+      page: page - 1,
+      limit: limit
+    }
+  };
 
-  res.render("search", { books });
+  if (term) {
+    bookResults.results = await Book.findAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${term}%` } },
+          { author: { [Op.like]: `%${term}%` } },
+          { genre: { [Op.like]: `%${term}%` } },
+          { year: { [Op.like]: `%${term}%` } }
+        ]
+      }
+    });
+  } else {
+    bookResults.results = books.slice(startIndex, endIndex);
+  }
+
+  res.render('index', { bookResults });
 });
 
 /* Show and post new book to database */

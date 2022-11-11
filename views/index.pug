@@ -1,31 +1,43 @@
 extends layout
 
 block content
-  h1 Books
-  form(action=`/books` method="POST")
+  h1
+    a(href="/") Books
+
+  form(action=`/books` method="get")
     input.search-input(type="search" name="term" placeholder="Search...")
     input.search-submit(type="submit" value="🔍")
-  p
-    a.button(href="/books/new") Create New Books
-  table
-    thead 
-      tr 
-        th title
-        th author
-        th genre 
-        th year
-    tbody 
 
-      each book in bookResults.results 
-        tr 
-          td
-            a(href="/books/" + book.id)= book.title
-          td= book.author
-          td= book.genre
-          td= book.year
-  if(bookResults.prev.page > 0)
-    a(href =`/books/?page=${bookResults.prev.page}&limit=${bookResults.prev.limit}`)
-      button(type="submit") Prev
   if(bookResults.results.length > 0)
-    a(href =`/books/?page=${bookResults.next.page}&limit=${bookResults.next.limit}`)
+    p
+      a.button(href="/books/new") Create New Books
+    table
+      thead 
+        tr 
+          th title
+          th author
+          th genre 
+          th year
+      tbody 
+
+        each book in bookResults.results 
+          tr 
+            td
+              a(href="/books/" + book.id)= book.title
+            td= book.author
+            td= book.genre
+            td= book.year
+
+    if(bookResults.prev.page > 0)
+      a(href =`/books?page=${bookResults.prev.page}&limit=${bookResults.prev.limit}`)
+        button(type="submit") Prev
+
+  if(bookResults.results.length > 0)
+    a(href =`/books?page=${bookResults.next.page}&limit=${bookResults.next.limit}`)
       button(type="submit") Next
+
+  if(bookResults.results.length === 0)
+    p Book(s) cannot be found
+
+    p
+      a(class="button" href="/") Home
